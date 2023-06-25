@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  flyway:
+      image: flyway/flyway:8.5.8-alpine
+      command:
+        -url=jdbc:postgresql://data_base:5432/data_base -user=postgres -password=314159265 migrate
+      volumes:
+        - .:/flyway/sql
+        - ./flyway/flyway.conf:/flyway/conf/flyway.conf
+      networks:
+        - postgres
+      environment:
+        - baselineOnMigrate=true
+
+networks:
+  postgres:

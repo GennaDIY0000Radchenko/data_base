@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  data_base:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=314159265
+      - POSTGRES_DB=data_base
+      - POSTGRES_HOST=data_base
+    ports:
+      - '5432:5432'
+    networks:
+      - postgres
+
+networks:
+  postgres:

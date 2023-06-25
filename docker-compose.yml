@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./app/
+    restart: on-failure
+    depends_on:
+      - data_base
+    networks:
+      - postgres
+    volumes:
+      - C:\Users\админ\PycharmProjects\python_coding\_course_3\data_base\db_labs\lab3_test\app:/app
+
+  data_base:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=314159265
+      - POSTGRES_DB=data_base
+      - POSTGRES_HOST=data_base
+    ports:
+      - '5432:5432'
+    networks:
+      - postgres
+
+
+  flyway:
+    image: flyway/flyway:8.5.8-alpine
+    command:
+      -url=jdbc:postgresql://data_base:5432/data_base -user=postgres -password=314159265 migrate
+    volumes:
+      - .:/flyway/sql
+      - ./flyway/flyway.conf:/flyway/conf/flyway.conf
+    depends_on:
+      - data_base
+      - app
+    networks:
+      - postgres
+    environment:
+      - baselineOnMigrate=true
+
+
+  flask:
+    build: ./flask/
+    depends_on:
+      - data_base
+    ports:
+      - '5000:5000'
+    networks:
+      - postgres
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    networks:
+      - postgres
+
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=data_base
+      - MONGO_INITDB_COLLECTION_LOCATIONS=locations
+      - MONGO_INITDB_COLLECTION_EO=eo
+      - MONGO_INITDB_COLLECTION_STUDENTS=students
+      - MONGO_INITDB_COLLECTION_TESTS=tests
+    networks:
+      - postgres
+
+networks:
+  postgres:

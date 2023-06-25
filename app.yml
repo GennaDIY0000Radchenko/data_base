@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./app/
+    restart: on-failure
+    networks:
+      - postgres
+    volumes:
+      - C:\Users\админ\PycharmProjects\python_coding\_course_3\data_base\db_labs\lab3_test\app:/app
+
+networks:
+  postgres:

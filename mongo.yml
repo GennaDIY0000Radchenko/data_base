@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=data_base
+      - MONGO_INITDB_COLLECTION_LOCATIONS=locations
+      - MONGO_INITDB_COLLECTION_EO=eo
+      - MONGO_INITDB_COLLECTION_STUDENTS=students
+      - MONGO_INITDB_COLLECTION_TESTS=tests
+    networks:
+      - postgres
+
+networks:
+  postgres:
