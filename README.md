@@ -45,7 +45,8 @@ Flyway (зачекати закінчення роботи App) :
 Redis:  
 ```docker-compose -f redis.yml up --build --force-recreate -d```  
 Flask:  
-```docker-compose -f flask.yml up --build --force-recreate -d``` 
+```docker-compose -f flask.yml up --build --force-recreate -d```  
+```docker-compose -f mongo.yml up --build --force-recreate -d```   
   
 Перевірити таблички  
 ```docker exec -it <copy num> psql -U postgres``` - для CMD  ```psql -U posrgres``` - для Terminal (data_base)  
@@ -63,3 +64,6 @@ Flask:
 У форматі:  
 Час в секундах   
 ```...```  
+
+Just in case :   
+```docker system prune -a```
