@@ -1,11 +1,11 @@
-import python_coding._course_3.data_base.db_labs.lab3_test.flask.SQLA_config as SQLA_config
-import python_coding._course_3.data_base.db_labs.lab3_test.flask.mongo_config as mongo_config
+import SQLA_config
+import mongo_config
+
+from mongo_config import *
+from SQLA_config import *
 
 from flask import Flask, render_template, redirect, request
 from pymongo import MongoClient
-
-from .mongo_config import *
-from .SQLA_config import *
 
 app = Flask(__name__)
 
@@ -21,6 +21,34 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 Config = SQLA_config.Config
+
+
+def fix_space_problem():
+    return {"Українська_мова_та_література": "Українська мова та література",
+            "Українська_мова": "Українська мова",
+            "Історія": "Історія України",
+            "Математика": "Математика",
+            "Фізика": "Фізика",
+            "Хімія": "Хімія",
+            "Географія": "Географія",
+            "Англійська": "Англійська мова",
+            "Французька": "Французька мова",
+            "Німецька": "Німецька мова",
+            "Іспанська": "Іспанська мова"}
+
+
+def subjects_dict():
+    return {"Українська мова та література": "uml_test_ball100",
+            "Українська мова": "ukr_test_ball100",
+            "Історія України": "hist_test_ball100",
+            "Математика": "math_test_ball100",
+            "Фізика": "phys_test_ball100",
+            "Хімія": "chem_test_ball100",
+            "Географія": "geo_test_ball100",
+            "Англійська мова": "eng_test_ball100",
+            "Французька мова": "fr_test_ball100",
+            "Німецька мова": "deu_test_ball100",
+            "Іспанська мова": "sp_test_ball100"}
 
 
 @app.route("/", methods=['POST', 'GET'])
@@ -58,7 +86,7 @@ def showTables():
         elif request.form['submit_button'] == "Filters":
             years = ("2019", "2020")
             regnames = config.fetchRegnames()
-            subjects_dict = config.subjectDict()
+            subjects_dict = subjects_dict()
             subjects = list(subjects_dict.keys())
             index = 0
             for subject in subjects:
@@ -207,7 +235,7 @@ def filters():
 
     years = ("2019", "2020")
     regnames = config.fetchRegnames()
-    subjects_dict = config.subjectDict()
+    subjects_dict = subjects_dict()
     subjects = list(subjects_dict.keys())
     index = 0
     for subject in subjects:
@@ -226,9 +254,9 @@ def filters():
         selected_subject = request.form['subjects']
         selected_function = request.form['funcs']
 
-        for key in config.spaceProblemSolverDict().keys():
+        for key in fix_space_problem().keys():
             if selected_subject == key:
-                selected_subject = config.spaceProblemSolverDict().get(key)
+                selected_subject = fix_space_problem().get(key)
         query_result = config.fetchGrade(selected_year, selected_regname, subjects_dict.get(selected_subject),
                                          selected_function)
         grade = query_result
